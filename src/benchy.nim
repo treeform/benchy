@@ -39,9 +39,9 @@ proc removeOutliers(s: var seq[SomeNumber]) =
       continue
     inc i
 
-var keepPlace: pointer
+var keepInt: int
 template keep*(value: untyped) =
-  keepPlace = value.unsafeAddr
+  keepInt = cast[int](value)
 
 template timeIt*(tag: string, body: untyped) =
   ## Quick template to time an operation.

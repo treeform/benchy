@@ -52,26 +52,27 @@ template timeIt*(tag: string, body: untyped) =
     deltas: seq[float64]
     stdd: seq[float64]
 
-  proc `test tag`() =
-    body
+  block:
+    proc test() =
+      body
 
-  while true:
-    inc num
-    let start = nowMs()
+    while true:
+      inc num
+      let start = nowMs()
 
-    `test tag`()
+      test()
 
-    let finish = nowMs()
+      let finish = nowMs()
 
-    let delta = finish - start
-    total += delta
-    deltas.add(delta)
-    if total > 60_000.0:
-      break
-    stdd.add(stdev(deltas))
-    if num >= 10:
-      if mean(stdd[^9 .. ^1]) - mean(stdd[^5 .. ^1]) < 0.2:
+      let delta = finish - start
+      total += delta
+      deltas.add(delta)
+      if total > 60_000.0:
         break
+      stdd.add(stdev(deltas))
+      if num >= 10:
+        if mean(stdd[^9 .. ^1]) - mean(stdd[^5 .. ^1]) < 0.2:
+          break
 
   removeOutliers(deltas)
   removeOutliers(deltas)

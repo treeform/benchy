@@ -33,7 +33,7 @@ proc removeOutliers(s: var seq[SomeNumber]) =
   let std = stdev(s)
   var i = 0
   while i < s.len:
-    if abs(s[i] - avg) > std*2:
+    if abs(s[i] - avg) > std * 2:
       #echo "remove: ", s[i]
       s.delete(i)
       continue
@@ -43,21 +43,19 @@ var keepInt: int
 template keep*(value: untyped) =
   keepInt = cast[int](value)
 
-template timeIt*(tag: string, body: untyped) =
+template timeIt*(tag: string, iterations = 10, body: untyped) =
   ## Quick template to time an operation.
-
-  var
-    num = 0
-    total: float64
-    deltas: seq[float64]
-    stdd: seq[float64]
-
   block:
+    var
+      num = 0
+      total: float64
+      deltas = newSeq[float64](iterations)
+      stdd = newSeq[float64](iterations)
+
     proc test() =
       body
 
-    while true:
-      inc num
+    for i in 0 ..< iterations:
       let start = nowMs()
 
       test()
@@ -66,26 +64,19 @@ template timeIt*(tag: string, body: untyped) =
 
       let delta = finish - start
       total += delta
-      deltas.add(delta)
-      if total > 60_000.0:
-        break
-      stdd.add(stdev(deltas))
-      if num >= 10:
-        if mean(stdd[^9 .. ^1]) - mean(stdd[^5 .. ^1]) < 0.2:
-          break
+      deltas[i] = delta
+      stdd[i] = stdev(deltas)
 
-  removeOutliers(deltas)
-  removeOutliers(deltas)
+    removeOutliers(deltas)
 
-  var readout = ""
-  var s = ""
-  var d = ""
-  formatValue(s, mean(deltas) , "0.3f")
-  formatValue(d, stdev(deltas) , "0.3f")
-  readout = s & " ms " & align("±" & d,10) & "  x" & $num
+    var s = ""
+    var d = ""
+    formatValue(s, mean(deltas) , "0.3f")
+    formatValue(d, stdev(deltas) , "0.3f")
+    let readout = s & " ms " & align("±" & d, 10) & "  x" & $num
 
-  var dots = ""
-  for i in tag.len + s.len .. 40:
-    dots.add(".")
+    var dots = ""
+    for i in tag.len + s.len .. 40:
+      dots.add(".")
 
-  echo tag, " ", dots, " ", readout
+    echo tag, " ", dots, " ", readout

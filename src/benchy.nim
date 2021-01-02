@@ -1,5 +1,3 @@
-## Public interface to you library.
-
 import std/monotimes, strformat, math, strutils
 
 proc nowMs(): float64 =
@@ -9,6 +7,12 @@ proc total(s: seq[SomeNumber]): float =
   ## Computes total of a sequence.
   for v in s:
     result += v.float
+
+proc min(s: seq[SomeNumber]): float =
+  ## Computes mean (average) of a sequence.
+  result = s[0].float
+  for v in s[1 .. ^1]:
+    result = min(v.float, result)
 
 proc mean(s: seq[SomeNumber]): float =
   ## Computes mean (average) of a sequence.
@@ -39,18 +43,27 @@ proc removeOutliers(s: var seq[SomeNumber]) =
       continue
     inc i
 
-var keepInt: int
+var
+  shownHeader = false
+  keepInt: int
+
 template keep*(value: untyped) =
   keepInt = cast[int](value)
 
-template timeIt*(tag: string, body: untyped) =
+proc dots(n: int): string =
+  for i in 0 ..< n:
+    result.add(".")
+
+template timeIt*(tag: string, iterations: untyped, body: untyped) =
   ## Quick template to time an operation.
+  if not shownHeader:
+    shownHeader = true
+    echo "name ............................... min time      avg time    std dv  times"
 
   var
     num = 0
     total: float64
     deltas: seq[float64]
-    stdd: seq[float64]
 
   block:
     proc test() =
@@ -67,25 +80,27 @@ template timeIt*(tag: string, body: untyped) =
       let delta = finish - start
       total += delta
       deltas.add(delta)
-      if total > 60_000.0:
-        break
-      stdd.add(stdev(deltas))
-      if num >= 10:
-        if mean(stdd[^9 .. ^1]) - mean(stdd[^5 .. ^1]) < 0.2:
+
+      when iterations != 0:
+        if num >= iterations:
+          break
+      else:
+        if total > 5_000.0 or num >= 1000:
           break
 
-  removeOutliers(deltas)
+  var minDelta = min(deltas)
   removeOutliers(deltas)
 
   var readout = ""
+  var m = ""
   var s = ""
   var d = ""
+  formatValue(m, minDelta, "0.3f")
   formatValue(s, mean(deltas) , "0.3f")
   formatValue(d, stdev(deltas) , "0.3f")
-  readout = s & " ms " & align("±" & d,10) & "  x" & $num
+  readout = m & " ms " & align(s, 10) & " ms " & align("±" & d,10) & "  " & align("x" & $num, 5)
 
-  var dots = ""
-  for i in tag.len + s.len .. 40:
-    dots.add(".")
+  echo tag, " ", dots(40 - tag.len - m.len), " ", readout
 
-  echo tag, " ", dots, " ", readout
+template timeIt*(tag: string, body: untyped) =
+  timeIt(tag, 0, body)

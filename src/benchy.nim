@@ -48,7 +48,9 @@ var
   keepInt: int
 
 template keep*(value: untyped) =
-  keepInt = cast[int](value)
+  keepInt = 0
+  {.emit: [keepInt, "= (void*)&", value,";"].}
+  #keepInt = cast[int](value)
 
 proc dots(n: int): string =
   for i in 0 ..< n:

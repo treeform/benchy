@@ -60,7 +60,7 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
   ## Quick template to time an operation.
   if not shownHeader:
     shownHeader = true
-    echo "name ............................... min time      avg time    std dv  times"
+    echo "name ............................... min time      avg time    std dv   runs"
 
   var
     num = 0

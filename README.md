@@ -9,7 +9,7 @@ timeIt "sleep 1ms":
 timeIt "sleep 200ms":
   sleep(200)
 
-timeIt "sleep randms":
+timeIt "sleep random":
   sleep(rand(0 .. 150))
 
 timeIt "number counter":
@@ -28,9 +28,10 @@ timeIt "string append":
 It will run the `timeIt` block at least 10 times but possibly more to figure out the standard divination. It will keep running it until things look like they stabilized. It will stop after 60s though.
 
 ```
-sleep 1ms ........................... 1.988 ms    ±0.021  x10
-sleep 200ms ....................... 200.565 ms    ±0.318  x10
-sleep randms ....................... 85.690 ms   ±42.987  x10
-number counter ...................... 0.000 ms    ±0.000  x10
-string append ...................... 40.731 ms    ±2.135  x75
+name ............................... min time      avg time    std dv   runs
+sleep 1ms .......................... 1.016 ms      1.993 ms    ±0.032  x1000
+sleep 200ms ...................... 200.403 ms    200.463 ms    ±0.022    x25
+sleep random ....................... 5.959 ms     75.490 ms   ±44.856    x67
+number counter ..................... 2.680 ms      2.747 ms    ±0.052  x1000
+string append ..................... 36.322 ms     37.796 ms    ±1.771   x127
 ```

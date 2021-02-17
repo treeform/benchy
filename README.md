@@ -25,7 +25,7 @@ timeIt "string append":
   keep(s)
 ```
 
-It will run the `timeIt` block at least 10 times but possibly more to figure out the standard divination. It will keep running it until things look like they stabilized. It will stop after 60s though.
+It will run the `timeIt` block at least 10 times but possibly more to figure out the standard deviation. It will keep running it until things look like they stabilized. It will stop after 60s though.
 
 ```
 name ............................... min time      avg time    std dv   runs

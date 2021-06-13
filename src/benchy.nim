@@ -1,6 +1,7 @@
 import std/monotimes, strformat, math, strutils
 
 proc nowMs(): float64 =
+  ## Gets current milliseconds.
   getMonoTime().ticks.float64 / 1000000.0
 
 proc total(s: seq[SomeNumber]): float =
@@ -28,38 +29,40 @@ proc variance(s: seq[SomeNumber]): float =
     result += (v.float - a) ^ 2
   result /= (s.len.float - 1)
 
-proc stdev(s: seq[SomeNumber]): float =
+proc stddev(s: seq[SomeNumber]): float =
   ## Computes the sample standard deviation of a sequence.
   sqrt(s.variance)
 
 proc removeOutliers(s: var seq[SomeNumber]) =
+  ## Remove numbers that are above 2 standard deviation.
   let avg = mean(s)
-  let std = stdev(s)
+  let std = stddev(s)
   var i = 0
   while i < s.len:
     if abs(s[i] - avg) > std*2:
-      #echo "remove: ", s[i]
       s.delete(i)
       continue
     inc i
 
 var
-  shownHeader = false
-  keepInt: int
+  shownHeader = false # Only show the header once.
+  keepInt: int # Results of keep template goes to this global.
 
 template keep*(value: untyped) =
+  ## Pass results of your computation here to keep the compiler from optimizing
+  ## your computation to nothing.
   keepInt += 1
   {.emit: [keepInt, "+= (void*)&", value,";"].}
   keepInt = keepInt and 0xFFFF
   #keepInt = cast[int](value)
 
-
 proc dots(n: int): string =
+  ## Drop a bunch of dots.
   for i in 0 ..< n:
     result.add(".")
 
 template timeIt*(tag: string, iterations: untyped, body: untyped) =
-  ## Quick template to time an operation.
+  ## Template to time block of code.
   if not shownHeader:
     shownHeader = true
     echo "name ............................... min time      avg time    std dv   runs"
@@ -101,10 +104,11 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
   var d = ""
   formatValue(m, minDelta, "0.3f")
   formatValue(s, mean(deltas) , "0.3f")
-  formatValue(d, stdev(deltas) , "0.3f")
+  formatValue(d, stddev(deltas) , "0.3f")
   readout = m & " ms " & align(s, 10) & " ms " & align("±" & d,10) & "  " & align("x" & $num, 5)
 
   echo tag, " ", dots(40 - tag.len - m.len), " ", readout
 
 template timeIt*(tag: string, body: untyped) =
+  ## Template to time block of code.
   timeIt(tag, 0, body)

@@ -12,8 +12,8 @@ proc total(s: seq[SomeNumber]): float =
 proc min(s: seq[SomeNumber]): float =
   ## Computes mean (average) of a sequence.
   result = s[0].float
-  for v in s[1 .. ^1]:
-    result = min(v.float, result)
+  for i in 1..s.high:
+    result = min(s[i].float, result)
 
 proc mean(s: seq[SomeNumber]): float =
   ## Computes mean (average) of a sequence.
@@ -41,8 +41,8 @@ proc removeOutliers(s: var seq[SomeNumber]) =
   while i < s.len:
     if abs(s[i] - avg) > std*2:
       s.delete(i)
-      continue
-    inc i
+    else:
+      inc i
 
 var
   shownHeader = false # Only show the header once.
@@ -56,10 +56,9 @@ template keep*(value: untyped) =
   keepInt = keepInt and 0xFFFF
   #keepInt = cast[int](value)
 
-proc dots(n: int): string =
+template dots(n: Natural): string =
   ## Drop a bunch of dots.
-  for i in 0 ..< n:
-    result.add(".")
+  repeat('.', n)
 
 template timeIt*(tag: string, iterations: untyped, body: untyped) =
   ## Template to time block of code.

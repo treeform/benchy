@@ -58,7 +58,10 @@ template keep*(value: untyped) =
 
 template dots(n: Natural): string =
   ## Drop a bunch of dots.
-  repeat('.', n)
+  if n > 0:
+    repeat('.', n)
+  else:
+    ""
 
 template timeIt*(tag: string, iterations: untyped, body: untyped) =
   ## Template to time block of code.

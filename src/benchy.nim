@@ -106,7 +106,11 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
   formatValue(d, stddev(deltas) , "0.3f")
   readout = m & " ms " & align(s, 10) & " ms " & align("±" & d,10) & "  " & align("x" & $num, 5)
 
-  echo tag, " ", dots(40 - tag.len - m.len), " ", readout
+  var tag2 = tag
+  let numDots = 40 - tag.len - m.len
+  if numDots < 0:
+    tag2.setLen(tag2.len + numDots)
+  echo tag2, " ", dots(40 - tag2.len - m.len), " ", readout
 
 template timeIt*(tag: string, body: untyped) =
   ## Template to time block of code.

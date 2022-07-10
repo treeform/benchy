@@ -64,8 +64,7 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
   ## Template to time block of code.
   if not shownHeader:
     shownHeader = true
-    echo "name ............................... min time      avg time    std dv   runs"
-
+    echo "   min time    avg time  std dv   runs  name"
   var
     num = 0
     total: float64
@@ -94,23 +93,17 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
         if total > 5_000.0 or num >= 1000:
           break
 
-  var minDelta = min(deltas)
+  let minDelta = min(deltas)
   removeOutliers(deltas)
+  let avgDelta = mean(deltas)
+  let stdDev = stddev(deltas)
 
-  var readout = ""
-  var m = ""
-  var s = ""
-  var d = ""
+  var
+    m, s, d: string
   formatValue(m, minDelta, "0.3f")
-  formatValue(s, mean(deltas) , "0.3f")
-  formatValue(d, stddev(deltas) , "0.3f")
-  readout = m & " ms " & align(s, 10) & " ms " & align("±" & d,10) & "  " & align("x" & $num, 5)
-
-  var tag2 = tag
-  let numDots = 40 - tag.len - m.len
-  if numDots < 0:
-    tag2.setLen(tag2.len + numDots)
-  echo tag2, " ", dots(40 - tag2.len - m.len), " ", readout
+  formatValue(s, avgDelta, "0.3f")
+  formatValue(d, stdDev, "0.3f")
+  echo align(m, 8) & " ms " & align(s, 8) & " ms " & align("±" & d, 8) & "  " & align("x" & $num, 5) & "  " & tag
 
 template timeIt*(tag: string, body: untyped) =
   ## Template to time block of code.

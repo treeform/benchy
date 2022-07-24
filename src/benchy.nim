@@ -71,7 +71,7 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
     deltas: seq[float64]
 
   block:
-    proc test() =
+    proc test() {.gensym.} =
       body
 
     while true:

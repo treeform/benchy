@@ -60,3 +60,9 @@ timeIt "isSpace", 1000:
     for i in 1..255:
       let c = char(i)
       keep isSpace(c)
+
+proc test() =
+  # See https://github.com/treeform/benchy/pull/10
+  discard
+timeIt "test function":
+  test()

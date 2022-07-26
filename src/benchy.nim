@@ -46,19 +46,15 @@ proc removeOutliers(s: var seq[SomeNumber]) =
 
 var
   shownHeader = false # Only show the header once.
-  keepInt: int # Results of keep template goes to this global.
+  keepInt: int        # Results of keep template goes to this global.
 
 template keep*(value: untyped) =
   ## Pass results of your computation here to keep the compiler from optimizing
   ## your computation to nothing.
   keepInt += 1
-  {.emit: [keepInt, "+= (void*)&", value,";"].}
+  {.emit: [keepInt, "+= (void*)&", value, ";"].}
   keepInt = keepInt and 0xFFFF
   #keepInt = cast[int](value)
-
-template dots(n: Natural): string =
-  ## Drop a bunch of dots.
-  repeat('.', n)
 
 template timeIt*(tag: string, iterations: untyped, body: untyped) =
   ## Template to time block of code.
@@ -75,7 +71,6 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
       body
 
     while true:
-      inc num
       let start = nowMs()
 
       test()
@@ -92,6 +87,7 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
       else:
         if total > 5_000.0 or num >= 1000:
           break
+      inc num
 
   let minDelta = min(deltas)
   removeOutliers(deltas)
@@ -103,7 +99,8 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
   formatValue(m, minDelta, "0.3f")
   formatValue(s, avgDelta, "0.3f")
   formatValue(d, stdDev, "0.3f")
-  echo align(m, 8) & " ms " & align(s, 8) & " ms " & align("±" & d, 8) & "  " & align("x" & $num, 5) & "  " & tag
+  echo align(m, 8) & " ms " & align(s, 8) & " ms " & align("±" & d, 8) & "  " &
+      align("x" & $num, 5) & "  " & tag
 
 template timeIt*(tag: string, body: untyped) =
   ## Template to time block of code.

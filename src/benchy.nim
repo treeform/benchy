@@ -105,3 +105,62 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
 template timeIt*(tag: string, body: untyped) =
   ## Template to time block of code.
   timeIt(tag, 0, body)
+
+type BenchyData* = object
+  name*: string
+  repetitions*: int
+  total*: float64
+  deltas*: seq[float64]
+  minDelta*: float64
+  avgDelta*: float64
+  stdDev*: float64
+
+template timeIt*(benchyData: var BenchyData, tag: string,
+    iterations: untyped, body: untyped) =
+  ## Template to time block of code.
+  if tag.len != 0:
+    benchyData.name = tag
+  benchyData.repetitions = 0
+  benchyData.total = 0f64
+  benchyData.deltas = @[]
+
+  block:
+    proc test() {.gensym.} =
+      body
+
+    while true:
+      let start = nowMs()
+
+      test()
+
+      let finish = nowMs()
+
+      let delta = finish - start
+      benchyData.total += delta
+      benchyData.deltas.add(delta)
+
+      when iterations != 0:
+        if benchyData.repetitions >= iterations:
+          break
+      else:
+        if benchyData.total > 5_000.0 or benchyData.repetitions >= 1000:
+          break
+      inc benchyData.repetitions
+
+  benchyData.minDelta = min(benchyData.deltas)
+  removeOutliers(benchyData.deltas)
+  benchyData.avgDelta = mean(benchyData.deltas)
+  benchyData.stdDev = stddev(benchyData.deltas)
+
+template timeIt*(benchyData: var BenchyData, tag: string, body: untyped) =
+  ## Template to time block of code.
+  timeIt(benchyData, tag, 0, body)
+
+template timeIt*(benchyData: var BenchyData, iterations: untyped,
+    body: untyped) =
+  ## Template to time block of code.
+  timeIt(benchyData, "", iterations, body)
+
+template timeIt*(benchyData: var BenchyData, body: untyped) =
+  ## Template to time block of code.
+  timeIt(benchyData, "", 0, body)

@@ -2,6 +2,29 @@
 
 import benchy, os, random
 
+var benchyData: BenchyData
+
+timeIt benchyData:
+  sleep(1)
+
+timeIt benchyData, "sleep 2ms":
+  sleep(2)
+
+timeIt benchyData, 100:
+  sleep(1)
+
+timeIt benchyData, "sleep 1ms", 10:
+  sleep(1)
+
+# import print
+# print benchyData
+
+assert benchyData.name == "sleep 1ms"
+assert benchyData.repetitions == 10
+# there was actually a bug in the code, for 10 iterations it would only add
+# 9 values to delta that's why I moved the inc after the break condition.
+assert benchyData.deltas.len == 10
+
 timeIt "sleep 1ms":
   sleep(1)
 

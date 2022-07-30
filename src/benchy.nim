@@ -106,23 +106,17 @@ template timeIt*(tag: string, body: untyped) =
   ## Template to time block of code.
   timeIt(tag, 0, body)
 
-type BenchyData* = object
-  name*: string
-  repetitions*: int
-  total*: float64
-  deltas*: seq[float64]
-  minDelta*: float64
-  avgDelta*: float64
-  stdDev*: float64
-
-template timeIt*(benchyData: var BenchyData, tag: string,
+template timeIt*(deltas: var openArray[float64],
     iterations: untyped, body: untyped) =
   ## Template to time block of code.
-  if tag.len != 0:
-    benchyData.name = tag
-  benchyData.repetitions = 0
-  benchyData.total = 0f64
-  benchyData.deltas = @[]
+
+  var
+    num = 0
+    total: float64
+    actualIterations = when deltas is array:
+        min(iterations, deltas.len)
+      else: # deltas is seq
+        iterations
 
   block:
     proc test() {.gensym.} =
@@ -136,31 +130,31 @@ template timeIt*(benchyData: var BenchyData, tag: string,
       let finish = nowMs()
 
       let delta = finish - start
-      benchyData.total += delta
-      benchyData.deltas.add(delta)
+      total += delta
 
-      when iterations != 0:
-        if benchyData.repetitions >= iterations:
+      when deltas is array:
+        deltas[num] = delta
+
+        if num >= actualIterations-1:
           break
-      else:
-        if benchyData.total > 5_000.0 or benchyData.repetitions >= 1000:
-          break
-      inc benchyData.repetitions
+        inc num
+      else: # deltas is seq
+        deltas.add(delta)
+        inc num
 
-  benchyData.minDelta = min(benchyData.deltas)
-  removeOutliers(benchyData.deltas)
-  benchyData.avgDelta = mean(benchyData.deltas)
-  benchyData.stdDev = stddev(benchyData.deltas)
+        when iterations != 0:
+          if num >= iterations:
+            break
+        else:
+          if total > 5_000.0 or num >= 1_000:
+            break
 
-template timeIt*(benchyData: var BenchyData, tag: string, body: untyped) =
+template timeIt*(deltas: var openArray[float64], body: untyped) =
   ## Template to time block of code.
-  timeIt(benchyData, tag, 0, body)
+  timeIt(
+    deltas,
+    when deltas is array: deltas.len
+    else: 0,
+    body
+  )
 
-template timeIt*(benchyData: var BenchyData, iterations: untyped,
-    body: untyped) =
-  ## Template to time block of code.
-  timeIt(benchyData, "", iterations, body)
-
-template timeIt*(benchyData: var BenchyData, body: untyped) =
-  ## Template to time block of code.
-  timeIt(benchyData, "", 0, body)

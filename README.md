@@ -46,64 +46,50 @@ number counter ..................... 2.680 ms      2.747 ms    ±0.052  x1000
 string append ..................... 36.322 ms     37.796 ms    ±1.771   x127
 ```
 
-If you need to process the data further you can pass in a `BenchyData` object. Nothing is printed in this case.
+If you need to process the data further you can pass in an `array[float64]` or `seq[float64]`. Nothing is printed in this case.
 
 ```nim
+var deltasArray: array[500, float64]
 
-var benchyData: BenchyData
-
-# this is exported by benchy.nim
-# type BenchyData* = object
-#   name*: string
-#   repetitions*: int
-#   total*: float64
-#   deltas*: seq[float64]
-#   minDelta*: float64
-#   avgDelta*: float64
-#   stdDev*: float64
-
-timeIt benchyData:
+# fills whole array
+timeIt deltasArray:
   sleep(1)
+assert deltasArray[^1] != 0.0
+deltasArray.fill 0.0
 
-timeIt benchyData, "sleep 1ms":
+# fills first 100 elements
+timeIt deltasArray, 100:
   sleep(1)
+assert deltasArray[99] != 0.0
+assert deltasArray[100] == 0.0
+deltasArray.fill 0.0
 
-timeIt benchyData, 100:
+# still fills whole array, if iterations >= deltasArray.len
+timeIt deltasArray, 1000:
   sleep(1)
+assert deltasArray[^1] != 0.0
 
-# the values are overwritten in every timeIt call, not accumulated
- 
-timeIt benchyData, "sleep 1ms", 10:
+var deltasSeq: seq[float64]
+
+# stops at 1000 (or after 5sec)
+timeIt deltasSeq:
   sleep(1)
+assert deltasSeq.len == 1000
 
-import print
-print benchyData
+# accumulates another 1000
+timeIt deltasSeq:
+  sleep(1)
+assert deltasSeq.len == 2000
+deltasSeq = @[]
 
+# stops at 200
+timeIt deltasSeq, 200:
+  sleep(1)
+assert deltasSeq.len == 200
+
+# you could save it to file now or do something else with it
 import jsony
-writeFile("benchyData.json", benchyData.toJson())
-```
-
-```
-benchyData=BenchyData(
-  name: "sleep 1ms",
-  repetitions: 10,
-  total: 12.23084500012919,
-  deltas: @[
-    1.111314999870956,
-    1.111803999636322,
-    1.111611000262201,
-    1.111871000379324,
-    1.111592999659479,
-    1.111990999896079,
-    1.111548999790102,
-    1.111929000355303,
-    1.112184000201523,
-    1.112081999890506
-  ],
-  minDelta: 1.111314999870956,
-  avgDelta: 1.11179289999418,
-  stdDev: 0.0002710988682955385
-)
+writeFile("deltas.json", deltasSeq.toJson())
 ```
 
 See API Reference: https://nimdocs.com/treeform/benchy/benchy.html

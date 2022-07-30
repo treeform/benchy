@@ -1,29 +1,44 @@
 ## Put your tests here.
 
-import benchy, os, random
+import benchy, os, random, algorithm
 
-var benchyData: BenchyData
+var deltasArray: array[500, float64]
 
-timeIt benchyData:
+# fills whole array
+timeIt deltasArray:
   sleep(1)
+assert deltasArray[^1] != 0.0
+deltasArray.fill 0.0
 
-timeIt benchyData, "sleep 2ms":
-  sleep(2)
-
-timeIt benchyData, 100:
+# fills first 100 elements
+timeIt deltasArray, 100:
   sleep(1)
+assert deltasArray[99] != 0.0
+assert deltasArray[100] == 0.0
+deltasArray.fill 0.0
 
-timeIt benchyData, "sleep 1ms", 10:
+# still fills whole array, if iterations >= deltasArray.len
+timeIt deltasArray, 1000:
   sleep(1)
+assert deltasArray[^1] != 0.0
 
-# import print
-# print benchyData
+var deltasSeq: seq[float64]
 
-assert benchyData.name == "sleep 1ms"
-assert benchyData.repetitions == 10
-# there was actually a bug in the code, for 10 iterations it would only add
-# 9 values to delta that's why I moved the inc after the break condition.
-assert benchyData.deltas.len == 10
+# stops at 1000
+timeIt deltasSeq:
+  sleep(1)
+assert deltasSeq.len == 1000
+
+# accumulates another 1000
+timeIt deltasSeq:
+  sleep(1)
+assert deltasSeq.len == 2000
+deltasSeq = @[]
+
+# stops at 200
+timeIt deltasSeq, 200:
+  sleep(1)
+assert deltasSeq.len == 200
 
 timeIt "sleep 1ms":
   sleep(1)

@@ -4,7 +4,7 @@
 
 ![Github Actions](https://github.com/treeform/benchy/workflows/Github%20Actions/badge.svg)
 
-[API reference](https://nimdocs.com/treeform/benchy)
+[API reference](https://treeform.github.io/benchy)
 
 This library has no dependencies other than the Nim standard library.
 

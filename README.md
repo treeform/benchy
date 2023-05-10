@@ -45,5 +45,3 @@ sleep random ....................... 5.959 ms     75.490 ms   ±44.856    x67
 number counter ..................... 2.680 ms      2.747 ms    ±0.052  x1000
 string append ..................... 36.322 ms     37.796 ms    ±1.771   x127
 ```
-
-See API Reference: https://nimdocs.com/treeform/benchy/benchy.html

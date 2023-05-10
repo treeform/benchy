@@ -1,0 +1,3 @@
+keep	benchy.html#keep.t,untyped	benchy: keep(value: untyped)	
+timeIt	benchy.html#timeIt.t,string,untyped,untyped	benchy: timeIt(tag: string; iterations: untyped; body: untyped)	
+timeIt	benchy.html#timeIt.t,string,untyped	benchy: timeIt(tag: string; body: untyped)	

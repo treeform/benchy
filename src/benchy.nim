@@ -1,4 +1,4 @@
-import std/monotimes, strformat, math, strutils
+import std/[monotimes, strformat, math, stats, strutils]
 
 when defined(benchyAffinty):
   when defined(windows):
@@ -24,44 +24,15 @@ proc nowMs(): float64 =
   ## Gets current milliseconds.
   getMonoTime().ticks.float64 / 1000000.0
 
-proc total(s: seq[float64]): float64 =
-  ## Computes total of a sequence.
-  for v in s:
-    result += v.float
-
-proc min(s: seq[float64]): float64 =
-  ## Computes mean (average) of a sequence.
-  result = s[0].float
-  for i in 1..s.high:
-    result = min(s[i].float, result)
-
-proc mean(s: seq[float64]): float64 =
-  ## Computes mean (average) of a sequence.
-  if s.len == 0: return NaN
-  s.total / s.len.float
-
 proc median(s: seq[float64]): float64 =
   ## Gets median (middle number) of a sequence.
   if s.len == 0: return NaN
   s[s.len div 2]
 
-proc variance(s: seq[float64]): float64 =
-  ## Computes the sample variance of a sequence.
-  if s.len <= 1:
-    return
-  let a = s.mean()
-  for v in s:
-    result += (v.float - a) ^ 2
-  result /= (s.len.float - 1)
-
-proc stdDev(s: seq[float64]): float64 =
-  ## Computes the sample standard deviation of a sequence.
-  sqrt(s.variance)
-
 proc removeOutliers(s: var seq[float64], p = 3.0) =
   ## Remove numbers that are above p standard deviation.
   let avg = mean(s)
-  let std = stdDev(s)
+  let std = standardDeviation(s)
   var i = 0
   while i < s.len:
     if abs(s[i] - avg) > std * p:
@@ -87,7 +58,7 @@ const brailleArr = [
 proc histogram(s: seq[float64]): string =
   let
     avg = mean(s)
-    std = stdDev(s)
+    std = standardDeviation(s)
     cell = std * 0.2
     bucketRanges = [int.low, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, int.high]
   var
@@ -178,7 +149,7 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
   let minDelta = min(deltas)
   removeOutliers(deltas)
   let avgDelta = mean(deltas)
-  let stdDev = stdDev(deltas)
+  let stdDev = standardDeviation(deltas)
   let median = median(deltas)
 
   var

@@ -13,6 +13,8 @@ This library has no dependencies other than the Nim standard library.
 Simple benchmarking to time your code. Just put your code in a `timeIt` block. Also put result of your computation into `keep()` so that compiler does not optimize it out. Don't forgot to run with `-d:release` or better yet `-d:danger`.
 
 ```nim
+import benchy, std/os, std/random
+
 timeIt "sleep 1ms":
   sleep(1)
 

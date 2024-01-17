@@ -30,7 +30,7 @@ jobs:
 
     - name: Add Nimble to PATH (windows)
       if: runner.os == 'Windows'
-      run: echo "C:\\Users\\runneradmin\\.nimble\\bin" >> $GITHUB_PATH
+      run: echo "C:/Users/runneradmin/.nimble/bin" >> $GITHUB_PATH
 
     - name: Install Version
       run: choosenim ${{ matrix.nim-version }}

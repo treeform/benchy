@@ -15,6 +15,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Install gcc
+      run: sudo apt-get install -y gcc
+
     - name: Install choosenim
       run: |
         curl -O https://nim-lang.org/choosenim/init.sh

@@ -45,5 +45,6 @@ jobs:
 
     - name: Run tests
       run:
+        pwd
         ls . -al
         nim c -r tests/test.nim

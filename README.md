@@ -1,6 +1,7 @@
 # Benchy
 
-`nimble install benchy`
+* `atlas use benchy`
+* `nimble install benchy`
 
 ![Github Actions](https://github.com/treeform/benchy/workflows/Github%20Actions/badge.svg)
 

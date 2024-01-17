@@ -23,7 +23,14 @@ jobs:
       run: |
         curl -O https://nim-lang.org/choosenim/init.sh
         sh init.sh -y
-        echo "${{ github.workspace }}/.nimble/bin" >> $GITHUB_PATH
+
+    - name: Add Nimble to PATH (linux)
+      if: runner.os == 'Linux'
+      run: echo "/home/runner/.nimble/bin" >> $GITHUB_PATH
+
+    - name: Add Nimble to PATH (windows)
+      if: runner.os == 'Windows'
+      run: echo "C:\Users\runneradmin\.nimble\bin" >> $GITHUB_PATH
 
     - name: Install Version
       run: choosenim ${{ matrix.nim-version }}
@@ -34,7 +41,7 @@ jobs:
         cd atlas
         git checkout cbba9fa77fa837931bf3c58e20c1f8cb15a22919
         nim c src/atlas.nim
-        sudo mv src/atlas ${{ github.workspace }}/.nimble/bin
+        sudo mv src/atlas /home/runner/.nimble/bin
 
     - name: Init Atlas
       run: atlas init

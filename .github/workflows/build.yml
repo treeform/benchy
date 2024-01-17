@@ -10,7 +10,7 @@ jobs:
 
     - name: Install choosenim
       run: |
-        curl https://nim-lang.org/choosenim/init.sh -sSf | sh
+        curl https://nim-lang.org/choosenim/init.sh -sSf -y | sh
         echo 'export PATH=~/.nimble/bin:$PATH' >> ~/.bashrc
         source ~/.bashrc
 

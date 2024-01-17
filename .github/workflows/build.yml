@@ -42,11 +42,17 @@ jobs:
     - name: Install code with atlas
       run: atlas use https://github.com/${{ github.repository }}/commit/${{ github.sha }}
 
-    - name: List packges
-      run: |
-        ls -la
-        cat atlas.workspace
-        cat nim.cfg
+    - name: List workspace
+      run: ls -la
+
+    - name: List packages
+      run: ls packages -al
+
+    - name: List workspace
+      run: cat atlas.workspace
+
+    - name: List nim.cfg
+      run: cat nim.cfg
 
     - name: Run tests
       run:

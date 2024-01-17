@@ -1,5 +1,5 @@
 name: GitHub Actions
-on: [push, pull_request]
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,7 +10,8 @@ jobs:
 
     - name: Install choosenim
       run: |
-        curl https://nim-lang.org/choosenim/init.sh -sSf -y | sh
+        curl -O https://nim-lang.org/choosenim/init.sh
+        sh init.sh -y
         echo 'export PATH=~/.nimble/bin:$PATH' >> ~/.bashrc
         source ~/.bashrc
 

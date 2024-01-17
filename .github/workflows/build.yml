@@ -43,7 +43,7 @@ jobs:
         cd atlas
         git checkout cbba9fa77fa837931bf3c58e20c1f8cb15a22919
         nim c src/atlas.nim
-        sudo mv src/atlas /home/runner/.nimble/bin
+        mv src/atlas /home/runner/.nimble/bin
 
     - name: Init Atlas
       run: atlas init

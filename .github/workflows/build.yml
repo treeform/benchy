@@ -45,4 +45,5 @@ jobs:
 
     - name: Run tests
       run:
+        ls . -al
         nim c -r tests/test.nim

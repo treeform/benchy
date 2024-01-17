@@ -19,6 +19,10 @@ jobs:
 
     steps:
 
+    - uses: actions/checkout@v3
+      with:
+        path: "${{ github.event.repository.name }}"
+
     - name: Install Choosenim
       run: |
         curl -O https://nim-lang.org/choosenim/init.sh
@@ -57,10 +61,7 @@ jobs:
       run: atlas init
 
     - name: Install this Commit
-      run: |
-        atlas use https://github.com/${{ github.repository }}
-        cd "${{ github.event.repository.name }}.${{ github.event.repository.owner.login }}.github.com"
-        git checkout ${{ github.sha }}
+      run: atlas use "${{ github.event.repository.name }}"
 
     - name: List nim.cfg
       run: cat nim.cfg

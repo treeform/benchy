@@ -42,5 +42,13 @@ jobs:
     - name: Install code with atlas
       run: atlas use https://github.com/${{ github.repository }}/commit/${{ github.sha }}
 
-    - name: Install code with atlas
-      run: ls -la
+    - name: List packges
+      run: |
+        ls -la
+        cat atlas.workspace
+        cat nim.cfg
+
+    - name: Run tests
+      run:
+        cd packages/${{ github.event.repository.name }}/
+        nim r tests/test.nim

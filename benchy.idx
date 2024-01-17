@@ -1,3 +1,5 @@
-keep	benchy.html#keep.t,untyped	benchy: keep(value: untyped)	
-timeIt	benchy.html#timeIt.t,string,untyped,untyped	benchy: timeIt(tag: string; iterations: untyped; body: untyped)	
-timeIt	benchy.html#timeIt.t,string,untyped	benchy: timeIt(tag: string; body: untyped)	
+nimTitle	benchy	benchy.html	module src/benchy		0
+nim	keep	benchy.html#keep.t,untyped	template keep(value: untyped)		117
+nim	timeIt	benchy.html#timeIt.t,string,untyped,untyped	template timeIt(tag: string; iterations: untyped; body: untyped)		125
+nim	timeIt	benchy.html#timeIt.t,string,untyped	template timeIt(tag: string; body: untyped)		195
+nimgrp	timeit	benchy.html#timeIt-templates-all	template		125

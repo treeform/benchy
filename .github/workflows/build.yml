@@ -38,9 +38,6 @@ jobs:
         echo "C:\Users\runneradmin\.nimble\bin" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
       shell: pwsh
 
-    - name: Install Version
-      run: choosenim ${{ matrix.nim-version }}
-
     - name: Install Atlas
       run: |
         git clone https://github.com/nim-lang/atlas.git
@@ -65,6 +62,9 @@ jobs:
 
     - name: List nim.cfg
       run: cat nim.cfg
+
+    - name: Install Version
+      run: choosenim ${{ matrix.nim-version }}
 
     - name: Run tests
       run: |

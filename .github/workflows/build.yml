@@ -18,6 +18,9 @@ jobs:
     - name: Install gcc
       run: sudo apt-get install -y gcc
 
+    - name: Install git
+      run: sudo apt-get install -y git
+
     - name: Install choosenim
       run: |
         curl -O https://nim-lang.org/choosenim/init.sh

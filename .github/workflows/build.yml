@@ -68,6 +68,6 @@ jobs:
 
     - name: Run tests
       run: |
-        cd "${{ github.event.repository.name }}.${{ github.event.repository.owner.login }}.github.com"
+        cd "${{ github.event.repository.name }}"
 
         nim c -r tests/test.nim

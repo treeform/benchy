@@ -28,11 +28,11 @@ jobs:
         curl -O https://nim-lang.org/choosenim/init.sh
         sh init.sh -y
 
-    - name: Add Nimble to PATH (linux)
+    - name: Add Nim to PATH (linux)
       if: runner.os == 'Linux'
       run: echo "/home/runner/.nimble/bin" >> $GITHUB_PATH
 
-    - name: Add Nimble to PATH (windows)
+    - name: Add Nim to PATH (windows)
       if: runner.os == 'Windows'
       run: |
         echo "C:\Users\runneradmin\.nimble\bin" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
@@ -48,11 +48,11 @@ jobs:
         git checkout cbba9fa77fa837931bf3c58e20c1f8cb15a22919
         nim c src/atlas.nim
 
-    - name: Move Atlas (linux)
+    - name: Add Atlas to PATH (linux)
       if: runner.os == 'Linux'
       run: mv atlas/src/atlas /home/runner/.nimble/bin
 
-    - name: Move Atlas (windows)
+    - name:  Add Atlas to PATH (windows)
       if: runner.os == 'Windows'
       run: mv atlas/src/atlas.exe C:\Users\runneradmin\.nimble\bin
       shell: pwsh

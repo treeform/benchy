@@ -43,7 +43,15 @@ jobs:
         cd atlas
         git checkout cbba9fa77fa837931bf3c58e20c1f8cb15a22919
         nim c src/atlas.nim
-        mv src/atlas /home/runner/.nimble/bin
+
+    - name: Move Atlas (linux)
+      if: runner.os == 'Linux'
+      run: mv src/atlas /home/runner/.nimble/bin
+
+    - name: Move Atlas (windows)
+      if: runner.os == 'Windows'
+      run: mv src/atlas.exe C:\Users\runneradmin\.nimble\bin
+      shell: pwsh
 
     - name: Init Atlas
       run: atlas init

@@ -57,7 +57,10 @@ jobs:
       run: atlas init
 
     - name: Install this Commit
-      run: atlas use https://github.com/${{ github.repository }}#${{ github.sha }}
+      run: |
+        atlas use https://github.com/${{ github.repository }}
+        cd "${{ github.event.repository.name }}.${{ github.event.repository.owner.login }}.github.com"
+        git checkout ${{ github.sha }}
 
     - name: List nim.cfg
       run: cat nim.cfg

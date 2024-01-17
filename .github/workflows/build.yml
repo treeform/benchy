@@ -22,18 +22,19 @@ jobs:
     - name: Install Choosenim
       run: |
         curl -O https://nim-lang.org/choosenim/init.sh
-        sh init.sh -y
-        echo "/home/runner/.nimble/bin" >> $GITHUB_PATH
+        sh init.sh -n
+        echo "${{ github.workspace }}/.nimble/bin" >> $GITHUB_PATH
 
     - name: Install Version
       run: choosenim ${{ matrix.nim-version }}
 
     - name: Install Atlas
       run: |
-        git clone -b 0.6.2 https://github.com/nim-lang/atlas.git
+        git clone https://github.com/nim-lang/atlas.git
         cd atlas
+        git checkout cbba9fa77fa837931bf3c58e20c1f8cb15a22919
         nim c src/atlas.nim
-        sudo mv src/atlas /home/runner/.nimble/bin
+        sudo mv src/atlas ${{ github.workspace }}/.nimble/bin
 
     - name: Init Atlas
       run: atlas init

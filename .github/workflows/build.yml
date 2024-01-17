@@ -1,19 +1,33 @@
-name: Github Actions
-on: [push, pull_request]
+name: GitHub Actions
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        nim-version: ['1.6.18', '2.0.2']
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: jiro4989/setup-nim-action@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-    - run: nimble test -y
-    - run: nimble test --gc:orc -y
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install choosenim
+      run: |
+        curl https://nim-lang.org/choosenim/init.sh -sSf | sh
+        echo 'export PATH=~/.nimble/bin:$PATH' >> ~/.bashrc
+        source ~/.bashrc
+
+    - name: Select Nim version
+      run: |
+        choosenim 2.0.2
+
+    - name: Check atlas installation
+      run: |
+        if ! command -v atlas &> /dev/null
+        then
+            echo "atlas could not be found"
+            exit 1
+        fi

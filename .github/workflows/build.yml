@@ -24,6 +24,11 @@ jobs:
     - name: Print Nim version
       run: nim --version
 
+    - name: Debug PATH and git
+      run: |
+        echo $PATH
+        which git
+
     - name: Install atlas
       run: |
         git clone https://github.com/nim-lang/atlas.git

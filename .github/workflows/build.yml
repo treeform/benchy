@@ -22,7 +22,7 @@ jobs:
     - name: Install Choosenim
       run: |
         curl -O https://nim-lang.org/choosenim/init.sh
-        sh init.sh -n
+        sh init.sh -y
         echo "${{ github.workspace }}/.nimble/bin" >> $GITHUB_PATH
 
     - name: Install Version

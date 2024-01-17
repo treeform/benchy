@@ -44,7 +44,7 @@ jobs:
       run: cd "${{ github.event.repository.name }}.${{ github.event.repository.owner.login }}.github.com"
 
     - name: Run tests
-      run:
+      run: |
         pwd
         ls . -al
         nim c -r tests/test.nim

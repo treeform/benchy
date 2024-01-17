@@ -40,7 +40,7 @@ jobs:
       run: atlas init
 
     - name: Install code with atlas
-      run: atlas use https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+      run: atlas use https://github.com/${{ github.repository }}@${{ github.sha }}
 
     - name: List workspace
       run: ls -la

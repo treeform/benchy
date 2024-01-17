@@ -12,14 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # - name: Checkout code
-    #   uses: actions/checkout@v2
 
     - name: Install choosenim
       run: |
         curl -O https://nim-lang.org/choosenim/init.sh
         sh init.sh -y
         echo "/home/runner/.nimble/bin" >> $GITHUB_PATH
+
+    - name: Install nim version
+      run: choosenim 1.6.18
 
     - name: Print Nim version
       run: nim --version

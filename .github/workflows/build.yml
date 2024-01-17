@@ -40,11 +40,7 @@ jobs:
     - name: List nim.cfg
       run: cat nim.cfg
 
-    - name: Cd into package
-      run: cd "${{ github.event.repository.name }}.${{ github.event.repository.owner.login }}.github.com"
-
     - name: Run tests
       run: |
-        pwd
-        ls . -al
+        cd "${{ github.event.repository.name }}.${{ github.event.repository.owner.login }}.github.com"
         nim c -r tests/test.nim

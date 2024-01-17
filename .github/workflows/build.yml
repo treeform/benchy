@@ -24,11 +24,6 @@ jobs:
     - name: Print Nim version
       run: nim --version
 
-    - name: Debug PATH and git
-      run: |
-        echo $PATH
-        which git
-
     - name: Install atlas
       run: |
         git clone https://github.com/nim-lang/atlas.git
@@ -42,19 +37,13 @@ jobs:
     - name: Install code with atlas
       run: atlas use https://github.com/${{ github.repository }}#${{ github.sha }}
 
-    - name: List workspace
-      run: ls -la
-
-    - name: List packages
-      run: ls packages -al
-
-    - name: List workspace
-      run: cat atlas.workspace
-
     - name: List nim.cfg
       run: cat nim.cfg
 
+    - name: Cd into package
+      run: cd "${{ github.event.repository.name }}.${{ github.event.repository.owner.login }}.github.com"
+
     - name: Run tests
       run:
-        cd packages/${{ github.event.repository.name }}/
+        cd ${{ github.event.repository.name }}
         nim r tests/test.nim

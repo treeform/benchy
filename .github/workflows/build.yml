@@ -24,9 +24,9 @@ jobs:
         sh init.sh -y
         echo 'PATH=/home/runner/.nimble/bin:$PATH' >> $GITHUB_ENV
 
-    - name: Select Nim version
-      run: |
-        choosenim 2.0.2
+    # - name: Select Nim version
+    #   run: |
+    #     choosenim 2.0.2
 
     - name: Check atlas installation
       run: |

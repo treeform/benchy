@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest]
         nim-version: ['1.6.18', '2.0.2']
 
     runs-on: ${{ matrix.os }}
@@ -30,7 +30,7 @@ jobs:
 
     - name: Install Atlas
       run: |
-        git clone https://github.com/nim-lang/atlas.git
+        git clone -b 0.6.2 https://github.com/nim-lang/atlas.git
         cd atlas
         nim c src/atlas.nim
         sudo mv src/atlas /home/runner/.nimble/bin

@@ -19,7 +19,7 @@ jobs:
       run: |
         curl -O https://nim-lang.org/choosenim/init.sh
         sh init.sh -y
-        echo 'PATH=$PATH:/home/runner/.nimble/bin' >> $GITHUB_ENV
+        echo 'PATH=${{ PATH }}:/home/runner/.nimble/bin' >> $GITHUB_ENV
 
     - name: Print Nim version
       run: nim --version

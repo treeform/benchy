@@ -49,7 +49,7 @@ jobs:
       if: runner.os == 'Linux'
       run: mv atlas/src/atlas /home/runner/.nimble/bin
 
-    - name:  Add Atlas to PATH (windows)
+    - name: Add Atlas to PATH (windows)
       if: runner.os == 'Windows'
       run: mv atlas/src/atlas.exe C:\Users\runneradmin\.nimble\bin
       shell: pwsh
@@ -58,7 +58,7 @@ jobs:
       run: atlas init
 
     - name: Install this Commit
-      run: atlas use "${{ github.event.repository.name }}"
+      run: atlas use file://${{ github.event.repository.name }}
 
     - name: List nim.cfg
       run: cat nim.cfg
@@ -70,5 +70,5 @@ jobs:
       run: |
         cd "${{ github.event.repository.name }}"
         # List test files here
-        nim c -r tests/test.nim
 
+        nim c -r tests/test.nim

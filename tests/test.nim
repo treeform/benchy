@@ -15,13 +15,11 @@ timeIt "number counter":
   var s = 0
   for i in 0 .. 1_000_000:
     s += s
-  keep(s)
 
 timeIt "string append":
   var s = "?"
   for i in 0 .. 26:
     s.add(s)
-  keep(s)
 
 timeIt "sleep 1ms x5", 5:
   sleep(1)
@@ -36,13 +34,11 @@ timeIt "number counter x20", 20:
   var s = 0
   for i in 0 .. 1_000_000:
     s += s
-  keep(s)
 
 timeIt "string append x20", 20:
   var s = "?"
   for i in 0 .. 26:
     s.add(s)
-  keep(s)
 
 import strutils
 
@@ -53,13 +49,13 @@ timeIt "isSpaceAscii", 1000:
   for n in 0 .. 1000:
     for i in 1..255:
       let c = char(i)
-      keep isSpaceAscii(c)
+      discard isSpaceAscii(c)
 
 timeIt "isSpace", 1000:
   for n in 0 .. 1000:
     for i in 1..255:
       let c = char(i)
-      keep isSpace(c)
+      discard isSpace(c)
 
 proc test() =
   # See https://github.com/treeform/benchy/pull/10

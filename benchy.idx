@@ -1,5 +1,5 @@
 nimTitle	benchy	benchy.html	module src/benchy		0
-nim	keep	benchy.html#keep.t,untyped	template keep(value: untyped)		117
-nim	timeIt	benchy.html#timeIt.t,string,untyped,untyped	template timeIt(tag: string; iterations: untyped; body: untyped)		125
-nim	timeIt	benchy.html#timeIt.t,string,untyped	template timeIt(tag: string; body: untyped)		195
-nimgrp	timeit	benchy.html#timeIt-templates-all	template		125
+nim	keep	benchy.html#keep.t,untyped	template keep(value: untyped)		115
+nim	timeIt	benchy.html#timeIt.t,string,untyped,untyped	template timeIt(tag: string; iterations: untyped; body: untyped)		118
+nim	timeIt	benchy.html#timeIt.t,string,untyped	template timeIt(tag: string; body: untyped)		188
+nimgrp	timeit	benchy.html#timeIt-templates-all	template		118

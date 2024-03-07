@@ -110,17 +110,10 @@ proc histogram(s: seq[float64]): string =
     brailleChart.add brailleArr[intBuckets[i*2]][intBuckets[i*2+1]]
   return brailleChart
 
-var
-  shownHeader = false # Only show the header once.
-  keepInt: int # Results of keep template goes to this global.
+var shownHeader = false # Only show the header once.
 
 template keep*(value: untyped) =
-  ## Pass results of your computation here to keep the compiler from optimizing
-  ## your computation to nothing.
-  keepInt += 1
-  {.emit: [keepInt, "+= (void*)&", value,";"].}
-  keepInt = keepInt and 0xFFFF
-  #keepInt = cast[int](value)
+  discard
 
 template timeIt*(tag: string, iterations: untyped, body: untyped) =
   ## Template to time the block of code.

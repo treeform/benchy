@@ -124,12 +124,14 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
       header.add "histogram "
     header.add "name"
     echo header
-  var
-    num = 0
-    minTime: float64 = float64.high
-    lastMinCount: int
-    total: float64
-    deltas: seq[float64]
+
+  {.hint[XDeclaredButNotUsed]: off.}:
+    var
+      num = 0
+      minTime: float64 = float64.high
+      lastMinCount: int
+      total: float64
+      deltas: seq[float64]
 
   block:
     proc test() {.gensym.} =
@@ -172,7 +174,7 @@ template timeIt*(tag: string, iterations: untyped, body: untyped) =
   removeOutliers(deltas)
   let avgDelta = mean(deltas)
   let stdDev = stdDev(deltas)
-  let median = median(deltas)
+  let median {.used.} = median(deltas)
 
   var
     m, s, d: string
